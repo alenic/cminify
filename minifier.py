@@ -249,7 +249,8 @@ def process_include(argFiles, minified_source):
     # Find the header files
     for f in argFiles:
         if(f[-2:] == '.h'):
-            headerFiles.append(f)
+            split = f.split('/')
+            headerFiles.append(split[-1])
 
     new_source = minified_source
     for hf in headerFiles:

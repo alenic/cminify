@@ -244,6 +244,18 @@ def print_additional_info(orig_source, minified_source, filename, args):
                 .format(orig_size, mini_size, delta, (float(delta) / float(orig_size)) * 100.0)
             )
 
+def process_include(argFiles, minified_source):
+    headerFiles = []
+    # Find the header files
+    for f in argFiles:
+        if(f[-2:] == '.h'):
+            headerFiles.append(f)
+
+    new_source = minified_source
+    for hf in headerFiles:
+        new_source = new_source.replace('#include "' + hf + '"', '')
+
+    return new_source
 
 def process_files(args):
     """Minifies a list of code files and displays additional info based on
@@ -273,6 +285,9 @@ def process_files(args):
         print_additional_info(
             orig_source_code, minified_source_code, filename, args
         )
+
+        # Process #include
+        minified_source_code = process_include(args.files, minified_source_code)
 
         # Finally output the minified code
         print(minified_source_code)
